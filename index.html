@@ -147,6 +147,13 @@
             return new Date(`${nextYear}-08-29`);
         }
 
+        // Function to reset the current school year countdown
+        function resetCurrentSchoolYearCountdown() {
+            const currentYearCountdown = document.getElementById('countdown-current-year');
+            const nextSchoolYearStartDate = calculateNextSchoolYearStartDate();
+            createCountdown('countdown-current-year', nextSchoolYearStartDate, 'Current School Year');
+        }
+
         // Function to create and initialize a countdown
         function createCountdown(elementId, endDate, label) {
             let countdownEndDate = endDate;
@@ -224,6 +231,19 @@
 
         // Set the initial mode based on system preference
         setInitialMode();
+
+        // Check if it's August 29th, and if so, reset the current school year countdown
+        const today = new Date();
+        if (today.getMonth() === 7 && today.getDate() === 29) { // August is month 7 (0-based)
+            resetCurrentSchoolYearCountdown();
+        }
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
