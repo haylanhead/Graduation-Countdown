@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Year Countdown</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.5s, color 0.5s;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        .countdown {
+            font-size: 24px;
+            margin-top: 20px;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            color: #333;
+        }
+
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background-color: #333;
+            color: #fff;
+        }
+
+        /* Dark Mode Toggle Button */
+        .dark-mode-toggle {
+            font-size: 32px;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        /* Dark mode background color for countdown boxes */
+        body.dark-mode .countdown {
+            background-color: #888;
+            color: #fff;
+        }
+
+        /* Disclaimer Styles */
+        .disclaimer {
+            font-size: 12px;
+            text-align: left;
+            position: absolute;
+            width: calc(50% - 20px);
+        }
+
+        .disclaimer.left {
+            left: 10px;
+            bottom: 50px;
+        }
+
+        .disclaimer.right {
+            right: 10px;
+            bottom: 50px;
+        }
+
+        /* Link Button Styles */
+        .link-button {
+            font-size: 14px;
+            text-align: right;
+            position: absolute;
+            bottom: 10px;
+            width: calc(50% - 20px);
+            background-color: #007acc;
+            padding: 5px 10px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            color: #fff;
+            text-decoration: none;
+            right: 10px;
+        }
+
+        /* Footer Styles */
+        .footer {
+            font-size: 12px;
+            text-align: center;
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Class Graduation Countdowns</h1>
+        <div id="countdown-current-year" class="countdown"></div>
+        <div id="countdown-seniors" class="countdown"></div>
+        <div id="countdown-juniors" class="countdown"></div>
+        <div id="countdown-sophomores" class="countdown"></div>
+        <div id="countdown-freshmen" class="countdown"></div>
+        <!-- Dark Mode Toggle Button (Top Right) -->
+        <div id="dark-mode-toggle" class="dark-mode-toggle">☀️</div>
+        <!-- Disclaimer 1: Countdown with Weekends, Holidays, and Breaks -->
+        <div class="disclaimer left">
+            DISCLAIMER: These timers count down with weekends, holidays, and breaks included.
+        </div>
+        <!-- Disclaimer 2: Independent Project -->
+        <div class="disclaimer right">
+            DISCLAIMER: This is an independent project and is not affiliated with Belgrade High School.
+        </div>
+        <!-- Link Button -->
+        <a href="https://www.bsd44.org" target="_blank" class="link-button">Visit bsd44.org</a>
+        <!-- Footer -->
+        <div class="footer">
+            &copy; 2023 Haylan Board. All Rights Reserved.
+        </div>
+    </div>
+
+    <script>
+        // Function to calculate the next school year start date (August 29 of the next year)
+        function calculateNextSchoolYearStartDate() {
+            const today = new Date();
+            const nextYear = today.getFullYear() + 1;
+            return new Date(`${nextYear}-08-29`);
+        }
+
+        // Function to create and initialize a countdown
+        function createCountdown(elementId, endDate, label) {
+            let countdownEndDate = endDate;
+
+            function updateCountdown() {
+                const now = new Date();
+                const timeRemaining = countdownEndDate - now;
+
+                if (timeRemaining <= 0) {
+                    document.getElementById(elementId).innerHTML = `${label} has graduated!`;
+                    // Automatically move to the next grade level and add a new freshman class
+                    countdownEndDate = new Date(`${now.getFullYear() + 1}-06-01`);
+                } else {
+                    const seconds = Math.floor(timeRemaining / 1000) % 60;
+                    const minutes = Math.floor((timeRemaining / (1000 * 60)) % 60);
+                    const hours = Math.floor((timeRemaining / (1000 * 60 * 60)) % 24);
+                    const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+                    const months = Math.floor(days / 30.44); // Average number of days per month
+                    const years = Math.floor(months / 12);
+
+                    document.getElementById(elementId).innerHTML = `${label} - Time remaining: ${years} years, ${months % 12} months, ${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
+                }
+            }
+
+            setInterval(updateCountdown, 1000);
+        }
+
+        // Toggle Dark Mode
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const body = document.body;
+
+        function setInitialMode() {
+            const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (prefersDarkMode) {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '🌙';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            }
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            // Toggle between sun and moon icons
+            const currentIcon = darkModeToggle.textContent;
+            darkModeToggle.textContent = currentIcon === '☀️' ? '🌙' : '☀️';
+        });
+
+        // Create and initialize countdowns for each class
+        createCountdown('countdown-current-year', new Date('2024-06-07'), 'Current School Year');
+        createCountdown('countdown-seniors', new Date('2024-06-01'), 'Seniors');
+        createCountdown('countdown-juniors', new Date('2025-06-01'), 'Juniors');
+        createCountdown('countdown-sophomores', new Date('2026-06-01'), 'Sophomores');
+        createCountdown('countdown-freshmen', new Date('2027-06-01'), 'Freshmen');
+
+        // Set the initial mode based on system preference
+        setInitialMode();
+    </script>
+</body>
+</html>
