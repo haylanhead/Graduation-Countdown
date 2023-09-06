@@ -130,73 +130,80 @@
     </div>
 
     <script>
-        // Function to calculate the next school year start date (August 29 of the next year)
-        function calculateNextSchoolYearStartDate() {
-            const today = new Date();
-            const nextYear = today.getFullYear() + 1;
-            return new Date(`${nextYear}-08-29`);
-        }
+    // Function to calculate the next school year start date (August 29 of the next year)
+    function calculateNextSchoolYearStartDate() {
+        const today = new Date();
+        const nextYear = today.getFullYear() + 1;
+        return new Date(`${nextYear}-08-29`);
+    }
 
-        // Function to create and initialize a countdown
-        function createCountdown(elementId, endDate, label) {
-            let countdownEndDate = endDate;
+    // Function to create and initialize a countdown
+    function createCountdown(elementId, endDate, label) {
+        let countdownEndDate = endDate;
 
-            function updateCountdown() {
-                const now = new Date();
-                const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-                const userTimeZoneOffset = now.getTimezoneOffset() * 60000;
-                const timeRemaining = countdownEndDate - now - userTimeZoneOffset;
+        function updateCountdown() {
+            const now = new Date();
+            const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const userTimeZoneOffset = now.getTimezoneOffset() * 60000;
+            const timeRemaining = countdownEndDate - now - userTimeZoneOffset;
 
-                if (timeRemaining <= 0) {
-                    document.getElementById(elementId).innerHTML = `${label} has graduated!`;
-                    // Automatically move to the next grade level and add a new freshman class
-                    countdownEndDate = new Date(`${now.getFullYear() + 1}-06-01`);
-                } else {
-                    const seconds = Math.floor(timeRemaining / 1000) % 60;
-                    const minutes = Math.floor((timeRemaining / (1000 * 60)) % 60);
-                    const hours = Math.floor((timeRemaining / (1000 * 60 * 60)) % 24);
-                    const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-                    const months = Math.floor(days / 30.44); // Average number of days per month
-                    const years = Math.floor(months / 12);
-
-                    document.getElementById(elementId).innerHTML = `${label} - Time remaining: ${years} years, ${months % 12} months, ${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
+            if (timeRemaining <= 0) {
+                document.getElementById(elementId).innerHTML = `${label} has graduated!`;
+                // Automatically move to the next grade level and add a new freshman class
+                countdownEndDate = new Date(`${now.getFullYear() + 1}-06-01`);
+                // Create a new freshman countdown
+                if (elementId === 'countdown-seniors') {
+                    createCountdown('countdown-juniors', new Date('2024-06-01'), 'Seniors');
+                    createCountdown('countdown-sophomores', new Date('2025-06-01'), 'Juniors');
+                    createCountdown('countdown-freshmen', new Date('2026-06-01'), 'Sophomores');
+                    createCountdown('countdown-new-freshmen', new Date('2027-06-01'), 'Freshmen');
                 }
-            }
-
-            setInterval(updateCountdown, 1000);
-        }
-
-        // Toggle Dark Mode
-        const darkModeToggle = document.getElementById('dark-mode-toggle');
-        const body = document.body;
-
-        function setInitialMode() {
-            const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            if (prefersDarkMode) {
-                body.classList.add('dark-mode');
-                darkModeToggle.textContent = '🌙';
             } else {
-                body.classList.remove('dark-mode');
-                darkModeToggle.textContent = '☀️';
+                const seconds = Math.floor(timeRemaining / 1000) % 60;
+                const minutes = Math.floor((timeRemaining / (1000 * 60)) % 60);
+                const hours = Math.floor((timeRemaining / (1000 * 60 * 60)) % 24);
+                const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+                const months = Math.floor(days / 30.44); // Average number of days per month
+                const years = Math.floor(months / 12);
+
+                document.getElementById(elementId).innerHTML = `${label} - Time remaining: ${years} years, ${months % 12} months, ${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
             }
         }
 
-        darkModeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark-mode');
-            // Toggle between sun and moon icons
-            const currentIcon = darkModeToggle.textContent;
-            darkModeToggle.textContent = currentIcon === '☀️' ? '🌙' : '☀️';
-        });
+        setInterval(updateCountdown, 1000);
+    }
 
-        // Create and initialize countdowns for each class
-        createCountdown('countdown-current-year', new Date('2024-06-07'), 'Current School Year');
-        createCountdown('countdown-seniors', new Date('2024-06-01'), 'Seniors');
-        createCountdown('countdown-juniors', new Date('2025-06-01'), 'Juniors');
-        createCountdown('countdown-sophomores', new Date('2026-06-01'), 'Sophomores');
-        createCountdown('countdown-freshmen', new Date('2027-06-01'), 'Freshmen');
+    // Toggle Dark Mode
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    const body = document.body;
 
-        // Set the initial mode based on system preference
-        setInitialMode();
-    </script>
+    function setInitialMode() {
+        const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDarkMode) {
+            body.classList.add('dark-mode');
+            darkModeToggle.textContent = '🌙';
+        } else {
+            body.classList.remove('dark-mode');
+            darkModeToggle.textContent = '☀️';
+        }
+    }
+
+    darkModeToggle.addEventListener('click', () => {
+        body.classList.toggle('dark-mode');
+        // Toggle between sun and moon icons
+        const currentIcon = darkModeToggle.textContent;
+        darkModeToggle.textContent = currentIcon === '☀️' ? '🌙' : '☀️';
+    });
+
+    // Create and initialize countdowns for each class
+    createCountdown('countdown-current-year', new Date('2024-06-07'), 'Current School Year');
+    createCountdown('countdown-seniors', new Date('2024-06-01'), 'Seniors');
+    createCountdown('countdown-juniors', new Date('2025-06-01'), 'Juniors');
+    createCountdown('countdown-sophomores', new Date('2026-06-01'), 'Sophomores');
+    createCountdown('countdown-freshmen', new Date('2027-06-01'), 'Freshmen');
+
+    // Set the initial mode based on system preference
+    setInitialMode();
+</script>
 </body>
 </html>
