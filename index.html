@@ -110,7 +110,37 @@
         body.dark-mode .name-text {
             color: #fff;
         }
-    </style>
+        
+        @media (max-width: 768px) {
+        .link-button, .info-text, .name-text {
+            position: static;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        #disclaimer, #disclaimer2 {
+            padding-left: 0;
+        }
+        @media (max-width: 768px) {
+        .link-button, .info-text, .name-text {
+            position: static;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        #disclaimer, #disclaimer2 {
+            padding-left: 0;
+        }
+        
+        #disclaimer{
+          padding-top:15px;  
+        }
+            
+    }
+</style>
+
+        
+    }
 </head>
 <body>
     <div class="container">
