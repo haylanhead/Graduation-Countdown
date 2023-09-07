@@ -11,9 +11,15 @@
             margin: 0;
             padding: 0;
             transition: background-color 0.5s, color 0.5s;
-            overflow: hidden;
+            overflow: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
-
+        
+        body::-webkit-scrollbar {
+            display: none;
+        }
+        
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -21,7 +27,6 @@
             position: relative;
         }
 
-        /* Common countdown styles */
         .countdown {
             font-size: 24px;
             margin-top: 20px;
@@ -29,27 +34,23 @@
             border-radius: 8px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
             color: #fff;
-            transition: background-color 0.5s; /* Added transition for background color */
+            transition: background-color 0.5s;
         }
 
-        /* Light mode countdown background color */
         .countdown.light-mode {
-            background-color: #fff; /* Updated background color for light mode */
-            color: #000; /* Set text color to black in light mode */
+            background-color: #fff;
+            color: #000;
         }
 
-        /* Dark mode countdown background color */
         .countdown.dark-mode {
-            background-color: #222; /* Updated background color for dark mode */
+            background-color: #222;
         }
 
-        /* Dark Mode Styles */
         body.dark-mode {
             background-color: #333;
             color: #fff;
         }
 
-        /* Dark Mode Toggle Button */
         .dark-mode-toggle {
             font-size: 32px;
             cursor: pointer;
@@ -59,7 +60,6 @@
             color: #444;
         }
 
-        /* Link Button Styles */
         .link-button {
             font-size: 14px;
             text-align: right;
@@ -74,12 +74,10 @@
             text-decoration: none;
         }
 
-        /* Change the link button color on hover */
         .link-button:hover {
             background-color: #005b9f;
         }
 
-        /* Copyright and Disclaimer Styles */
         #disclaimer{
             padding-left: 140px;
         }
@@ -90,62 +88,59 @@
             font-size: 12px;
             text-align: left;
             position: absolute;
-            bottom: 30px;
+            bottom: 20px;
         }
 
-        /* Updated styles for text color in dark mode */
         body.dark-mode .info-text {
             color: #fff;
         }
 
-        /* Name Text Styles */
         .name-text {
             font-size: 12px;
             text-align: left;
             position: absolute;
-            bottom: 30px;
+            bottom: 20px;
             left: 10px;
+            
         }
 
-        /* Updated styles for text color in dark mode */
         body.dark-mode .name-text {
             color: #fff;
         }
         
         @media (max-width: 768px) {
-        .link-button, .info-text, .name-text {
-            position: static;
-            text-align: center;
-            margin-bottom: 12px;
-        }
+            .link-button, .info-text, .name-text {
+                position: static;
+                text-align: center;
+                margin-bottom: 10px;
+            }
 
-        body{
-            overflow: hidden;
-        }
+            #disclaimer, #disclaimer2 {
+                padding-left: 0;
+            }
 
-        #disclaimer, #disclaimer2 {
-            padding-left: 0;
-        }
-        @media (max-width: 768px) {
-        .link-button, .info-text, .name-text {
-            position: static;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        #disclaimer, #disclaimer2 {
-            padding-left: 0;
-        }
-        
-        #disclaimer{
-          padding-top:15px;  
-        }
+            #disclaimer{
+              padding-top: 15px;
+              margin-bottom: 12px;
+            }
             
-    }
-</style>
+            #disclaimer2 {
+              padding-left: 0;
+              margin-bottom: 12px;
+            }
+            
+            .countdown {
+            font-size: 24px;
+            margin-top: 18px;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            color: #fff;
+            transition: background-color 0.5s;
+            }
+        }
+    </style>
 
-        
-    
 </head>
 <body>
     <div class="container">
@@ -155,14 +150,11 @@
         <div id="countdown-juniors" class="countdown light-mode"></div>
         <div id="countdown-sophomores" class="countdown light-mode"></div>
         <div id="countdown-freshmen" class="countdown light-mode"></div>
-        <!-- Dark Mode Toggle Button (Top Right) -->
         <div id="dark-mode-toggle" class="dark-mode-toggle">☀️</div>
     </div>
     
-    <!-- Link Button to bsd44.org -->
     <a href="https://www.bsd44.org" target="_blank" class="link-button">Visit bsd44.org</a>
 
-    <!-- Copyright and Disclaimer Text -->
     <div class="info-text" id="disclaimer">
         This website is in no way affiliated with Belgrade Schools.
     </div>
@@ -175,21 +167,18 @@
     </div>
 
     <script>
-        // Function to calculate the next school year start date (August 29 of the next year)
         function calculateNextSchoolYearStartDate() {
             const today = new Date();
             const nextYear = today.getFullYear() + 1;
             return new Date(`${nextYear}-08-29`);
         }
 
-        // Function to reset the current school year countdown
         function resetCurrentSchoolYearCountdown() {
             const currentYearCountdown = document.getElementById('countdown-current-year');
             const nextSchoolYearStartDate = calculateNextSchoolYearStartDate();
             createCountdown('countdown-current-year', nextSchoolYearStartDate, 'Current School Year');
         }
 
-        // Function to create and initialize a countdown
         function createCountdown(elementId, endDate, label) {
             let countdownEndDate = endDate;
 
@@ -201,9 +190,7 @@
 
                 if (timeRemaining <= 0) {
                     document.getElementById(elementId).innerHTML = `${label} has graduated!`;
-                    // Automatically move to the next grade level and add a new freshman class
                     countdownEndDate = new Date(`${now.getFullYear() + 1}-06-01`);
-                    // Create a new freshman countdown
                     if (elementId === 'countdown-seniors') {
                         createCountdown('countdown-juniors', new Date('2024-06-01'), 'Seniors');
                         createCountdown('countdown-sophomores', new Date('2025-06-01'), 'Juniors');
@@ -215,7 +202,7 @@
                     const minutes = Math.floor((timeRemaining / (1000 * 60)) % 60);
                     const hours = Math.floor((timeRemaining / (1000 * 60 * 60)) % 24);
                     const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-                    const months = Math.floor(days / 30.44); // Average number of days per month
+                    const months = Math.floor(days / 30.44);
                     const years = Math.floor(months / 12);
 
                     document.getElementById(elementId).innerHTML = `${label} - Time remaining: ${years} years, ${months % 12} months, ${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
@@ -225,7 +212,6 @@
             setInterval(updateCountdown, 1000);
         }
 
-        // Toggle Dark Mode
         const darkModeToggle = document.getElementById('dark-mode-toggle');
         const body = document.body;
 
@@ -234,7 +220,6 @@
             if (prefersDarkMode) {
                 body.classList.add('dark-mode');
                 darkModeToggle.textContent = '🌙';
-                // Update countdown elements to dark mode
                 document.querySelectorAll('.countdown').forEach(element => {
                     element.classList.remove('light-mode');
                     element.classList.add('dark-mode');
@@ -247,38 +232,26 @@
 
         darkModeToggle.addEventListener('click', () => {
             body.classList.toggle('dark-mode');
-            // Toggle between sun and moon icons
             const currentIcon = darkModeToggle.textContent;
             darkModeToggle.textContent = currentIcon === '☀️' ? '🌙' : '☀️';
-            // Toggle countdown elements between light and dark mode
             document.querySelectorAll('.countdown').forEach(element => {
                 element.classList.toggle('light-mode');
                 element.classList.toggle('dark-mode');
             });
         });
 
-        // Create and initialize countdowns for each class
         createCountdown('countdown-current-year', new Date('2024-06-07'), 'Current School Year');
         createCountdown('countdown-seniors', new Date('2024-06-01'), 'Seniors');
         createCountdown('countdown-juniors', new Date('2025-06-01'), 'Juniors');
         createCountdown('countdown-sophomores', new Date('2026-06-01'), 'Sophomores');
         createCountdown('countdown-freshmen', new Date('2027-06-01'), 'Freshmen');
 
-        // Set the initial mode based on system preference
         setInitialMode();
 
-        // Check if it's August 29th, and if so, reset the current school year countdown
         const today = new Date();
-        if (today.getMonth() === 7 && today.getDate() === 29) { // August is month 7 (0-based)
+        if (today.getMonth() === 7 && today.getDate() === 29) {
             resetCurrentSchoolYearCountdown();
         }
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
