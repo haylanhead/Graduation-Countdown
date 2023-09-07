@@ -108,7 +108,7 @@
             color: #fff;
         }
         
-        @media (max-width: 768px) {
+        @media (max-width: 1178px) {
             .link-button, .info-text, .name-text {
                 position: static;
                 text-align: center;
@@ -142,9 +142,17 @@
         
         @media (max-width: 768px) and (orientation: landscape) {
     .info-text, .name-text, .link-button {
-        position: static;
+        position: fixed;
+        width: 100%;
         text-align: center;
-        margin-bottom: 10px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: 0;
+    }
+
+    .info-text {
+        bottom: 60px; /* Adjust as needed to avoid overlapping with the button */
     }
 
     #disclaimer, #disclaimer2 {
@@ -154,11 +162,8 @@
     #disclaimer {
         padding-top: 15px;
     }
-
-    .dark-mode-toggle {
-        top: 5px;
-    }
 }
+
     </style>
 
 </head>
