@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.1.2/luxon.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Year Countdown</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.5s, color 0.5s;
+            overflow: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        body::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        .countdown {
+            font-size: 24px;
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            color: #fff;
+            transition: background-color 0.5s;
+        }
+
+        .countdown.light-mode {
+            background-color: #fff;
+            color: #000;
+        }
+
+        .countdown.dark-mode {
+            background-color: #222;
+        }
+
+        body.dark-mode {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .dark-mode-toggle {
+            font-size: 32px;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #444;
+        }
+
+        .link-button {
+            font-size: 14px;
+            text-align: right;
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: #007acc;
+            padding: 5px 10px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .link-button:hover {
+            background-color: #005b9f;
+        }
+
+        #disclaimer{
+            padding-left: 140px;
+        }
+        #disclaimer2{
+            padding-left: 447px;
+        }
+        .info-text {
+            font-size: 12px;
+            text-align: left;
+            position: absolute;
+            bottom: 20px;
+        }
+
+        body.dark-mode .info-text {
+            color: #fff;
+        }
+
+        .name-text {
+            font-size: 12px;
+            text-align: left;
+            position: absolute;
+            bottom: 20px;
+            left: 10px;
+            
+        }
+
+        body.dark-mode .name-text {
+            color: #fff;
+        }
+        
+        @media (max-width: 1178px) {
+            .link-button, .info-text, .name-text {
+                position: static;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+
+            #disclaimer, #disclaimer2 {
+                padding-left: 0;
+            }
+
+            #disclaimer{
+              padding-top: 15px;
+              margin-bottom: 12px;
+            }
+            
+            #disclaimer2 {
+              padding-left: 0;
+              margin-bottom: 12px;
+            }
+            
+            .countdown {
+            font-size: 24px;
+            margin-top: 18px;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            color: #fff;
+            transition: background-color 0.5s;
+            }
+        }
+        
+        @media (max-width: 768px) and (orientation: landscape) {
+    .info-text, .name-text, .link-button {
+        position: fixed;
+        width: 100%;
+        text-align: center;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: 0;
+    }
+
+    .info-text {
+        bottom: 60px; /* Adjust as needed to avoid overlapping with the button */
+    }
+
+    #disclaimer, #disclaimer2 {
+        padding-left: 0;
+    }
+
+    #disclaimer {
+        padding-top: 15px;
+    }
+}
+
+    </style>
+
+</head>
+<body>
+    <div class="container">
+        <h1>Class Graduation Countdowns</h1>
+        <div id="countdown-current-year" class="countdown light-mode"></div>
+        <div id="countdown-seniors" class="countdown light-mode"></div>
+        <div id="countdown-juniors" class="countdown light-mode"></div>
+        <div id="countdown-sophomores" class="countdown light-mode"></div>
+        <div id="countdown-freshmen" class="countdown light-mode"></div>
+        <div id="dark-mode-toggle" class="dark-mode-toggle">☀️</div>
+    </div>
+    
+    <a href="https://www.bsd44.org" target="_blank" class="link-button">Visit bsd44.org</a>
+
+    <div class="info-text" id="disclaimer">
+        This website is in no way affiliated with Belgrade Schools.
+    </div>
+    <div class="name-text">
+        Haylan Board &copy; 2023
+    </div>
+
+    <div class="name-text" id="disclaimer2">
+        The timers have weekends, breaks, and the summer (except for the current school year timer) not factored out 
+    </div>
+
+    <script>
+        function calculateNextSchoolYearStartDate() {
+            const today = luxon.DateTime.local();
+            const nextYear = today.plus({ years: 1 }).set({ month: 8, day: 29 });
+            return nextYear;
+        }
+
+        function resetCurrentSchoolYearCountdown() {
+            const currentYearCountdown = document.getElementById('countdown-current-year');
+            const nextSchoolYearStartDate = calculateNextSchoolYearStartDate();
+            createCountdown('countdown-current-year', nextSchoolYearStartDate, 'Current School Year');
+        }
+
+        function createCountdown(elementId, endDate, label) {
+            let countdownEndDate = endDate;
+
+            function updateCountdown() {
+                const now = luxon.DateTime.now();
+                const timeRemaining = countdownEndDate.diff(now);
+
+                if (timeRemaining.as('milliseconds') <= 0) {
+                    document.getElementById(elementId).textContent = `${label} has graduated!`;
+                    countdownEndDate = luxon.DateTime.local(now.year + 1, 6, 1);
+                    if (elementId === 'countdown-seniors') {
+                        createCountdown('countdown-juniors', luxon.DateTime.local(2024, 6, 1), 'Seniors');
+                        createCountdown('countdown-sophomores', luxon.DateTime.local(2025, 6, 1), 'Juniors');
+                        createCountdown('countdown-freshmen', luxon.DateTime.local(2026, 6, 1), 'Sophomores');
+                        createCountdown('countdown-new-freshmen', luxon.DateTime.local(2027, 6, 1), 'Freshmen');
+                    }
+                } else {
+                    document.getElementById(elementId).textContent = `${label} - Time remaining: ${timeRemaining.toFormat("y 'years,' M 'months,' d 'days,' h 'hours,' m 'minutes,' s 'seconds'"}`;
+                }
+            }
+
+            setInterval(updateCountdown, 1000);
+        }
+
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const body = document.body;
+
+        function setInitialMode() {
+            const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (prefersDarkMode) {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '🌙';
+                document.querySelectorAll('.countdown').forEach(element => {
+                    element.classList.remove('light-mode');
+                    element.classList.add('dark-mode');
+                });
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            }
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            const currentIcon = darkModeToggle.textContent;
+            darkModeToggle.textContent = currentIcon === '☀️' ? '🌙' : '☀️';
+            document.querySelectorAll('.countdown').forEach(element => {
+                element.classList.toggle('light-mode');
+                element.classList.toggle('dark-mode');
+            });
+        });
+
+        createCountdown('countdown-current-year', luxon.DateTime.fromISO('2024-06-07T00:00:00Z'), 'Current School Year');
+        createCountdown('countdown-seniors', luxon.DateTime.fromISO('2024-06-01T00:00:00Z'), 'Seniors');
+        createCountdown('countdown-juniors', luxon.DateTime.fromISO('2025-06-01T00:00:00Z'), 'Juniors');
+        createCountdown('countdown-sophomores', luxon.DateTime.fromISO('2026-06-01T00:00:00Z'), 'Sophomores');
+        createCountdown('countdown-freshmen', luxon.DateTime.fromISO('2027-06-01T00:00:00Z'), 'Freshmen');
+
+        setInitialMode();
+
+        const today = luxon.DateTime.now();
+        if (today.month === 8 && today.day === 29) {
+            resetCurrentSchoolYearCountdown();
+        }
+    </script>
+</body>
+</html>
