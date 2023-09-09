@@ -1,4 +1,7 @@
-<html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>School Year Countdown</title>
@@ -164,7 +167,8 @@
 
     </style>
 
-<style type="text/css" id="operaUserStyle"></style></head>
+</head>
+
 <body class="dark-mode">
     <div class="container">
         <h1>Class Graduation Countdowns</h1>
@@ -190,92 +194,92 @@
     </div>
 
     <script>
-        function calculateNextSchoolYearStartDate() {
-            const today = new Date();
-            const nextYear = today.getFullYear() + 1;
-            return new Date(`${nextYear}-08-29`);
-        }
-
-        function resetCurrentSchoolYearCountdown() {
-            const currentYearCountdown = document.getElementById('countdown-current-year');
-            const nextSchoolYearStartDate = calculateNextSchoolYearStartDate();
-            createCountdown('countdown-current-year', nextSchoolYearStartDate, 'Current School Year');
-        }
-
-        function createCountdown(elementId, endDate, label) {
-            let countdownEndDate = endDate;
-
-            function updateCountdown() {
-                const now = new Date();
-                const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-                const userTimeZoneOffset = now.getTimezoneOffset() * 60000;
-                const timeRemaining = countdownEndDate - now - userTimeZoneOffset;
-
-                if (timeRemaining <= 0) {
-                    document.getElementById(elementId).innerHTML = `${label} has graduated!`;
-                    countdownEndDate = new Date(`${now.getFullYear() + 1}-06-01`);
-                    if (elementId === 'countdown-seniors') {
-                        createCountdown('countdown-juniors', new Date('2024-06-01'), 'Seniors');
-                        createCountdown('countdown-sophomores', new Date('2025-06-01'), 'Juniors');
-                        createCountdown('countdown-freshmen', new Date('2026-06-01'), 'Sophomores');
-                        createCountdown('countdown-new-freshmen', new Date('2027-06-01'), 'Freshmen');
-                    }
-                } else {
-                    const seconds = Math.floor(timeRemaining / 1000) % 60;
-                    const minutes = Math.floor((timeRemaining / (1000 * 60)) % 60);
-                    const hours = Math.floor((timeRemaining / (1000 * 60 * 60)) % 24);
-                    const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-                    const months = Math.floor(days / 30.44);
-                    const years = Math.floor(months / 12);
-
-                    document.getElementById(elementId).innerHTML = `${label} - Time remaining: ${years} years, ${months % 12} months, ${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
-                }
-            }
-
-            setInterval(updateCountdown, 1000);
-        }
-
-        const darkModeToggle = document.getElementById('dark-mode-toggle');
-        const body = document.body;
-
-        function setInitialMode() {
-            const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            if (prefersDarkMode) {
-                body.classList.add('dark-mode');
-                darkModeToggle.textContent = '🌙';
-                document.querySelectorAll('.countdown').forEach(element => {
-                    element.classList.remove('light-mode');
-                    element.classList.add('dark-mode');
-                });
-            } else {
-                body.classList.remove('dark-mode');
-                darkModeToggle.textContent = '☀️';
-            }
-        }
-
-        darkModeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark-mode');
-            const currentIcon = darkModeToggle.textContent;
-            darkModeToggle.textContent = currentIcon === '☀️' ? '🌙' : '☀️';
-            document.querySelectorAll('.countdown').forEach(element => {
-                element.classList.toggle('light-mode');
-                element.classList.toggle('dark-mode');
-            });
-        });
-
-        createCountdown('countdown-current-year', new Date('2024-06-07'), 'Current School Year');
-        createCountdown('countdown-seniors', new Date('2024-06-01'), 'Seniors');
-        createCountdown('countdown-juniors', new Date('2025-06-01'), 'Juniors');
-        createCountdown('countdown-sophomores', new Date('2026-06-01'), 'Sophomores');
-        createCountdown('countdown-freshmen', new Date('2027-06-01'), 'Freshmen');
-
-        setInitialMode();
-
+    function calculateNextSchoolYearStartDate() {
         const today = new Date();
-        if (today.getMonth() === 7 && today.getDate() === 29) {
-            resetCurrentSchoolYearCountdown();
+        const nextYear = today.getFullYear() + 1;
+        return new Date(nextYear, 7, 29); // August is month 7 in JavaScript
+    }
+
+    function resetCurrentSchoolYearCountdown() {
+        const currentYearCountdown = document.getElementById('countdown-current-year');
+        const nextSchoolYearStartDate = calculateNextSchoolYearStartDate();
+        createCountdown('countdown-current-year', nextSchoolYearStartDate, 'Current School Year');
+    }
+
+    function createCountdown(elementId, endDate, label) {
+        let countdownEndDate = endDate;
+
+        function updateCountdown() {
+            const now = new Date();
+            const timeRemaining = countdownEndDate - now;
+
+            if (timeRemaining <= 0) {
+                document.getElementById(elementId).innerHTML = `${label} has graduated!`;
+                countdownEndDate = new Date(now.getFullYear() + 1, 5, 1); // June is month 5 in JavaScript
+                if (elementId === 'countdown-seniors') {
+                    createCountdown('countdown-juniors', new Date(2024, 5, 1), 'Seniors');
+                    createCountdown('countdown-sophomores', new Date(2025, 5, 1), 'Juniors');
+                    createCountdown('countdown-freshmen', new Date(2026, 5, 1), 'Sophomores');
+                    createCountdown('countdown-new-freshmen', new Date(2027, 5, 1), 'Freshmen');
+                }
+            } else {
+                const seconds = Math.floor(timeRemaining / 1000) % 60;
+                const minutes = Math.floor((timeRemaining / (1000 * 60)) % 60);
+                const hours = Math.floor((timeRemaining / (1000 * 60 * 60)) % 24);
+                const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+                const months = Math.floor(days / 30.44);
+                const years = Math.floor(months / 12);
+
+                document.getElementById(elementId).innerHTML = `${label} - Time remaining: ${years} years, ${months % 12} months, ${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
+            }
         }
-    </script>
+
+        setInterval(updateCountdown, 1000);
+    }
+
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    const body = document.body;
+
+    function setInitialMode() {
+        const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDarkMode) {
+            body.classList.add('dark-mode');
+            darkModeToggle.textContent = '🌙';
+            document.querySelectorAll('.countdown').forEach(element => {
+                element.classList.remove('light-mode');
+                element.classList.add('dark-mode');
+            });
+        } else {
+            body.classList.remove('dark-mode');
+            darkModeToggle.textContent = '☀️';
+        }
+    }
+
+    darkModeToggle.addEventListener('click', () => {
+        body.classList.toggle('dark-mode');
+        const currentIcon = darkModeToggle.textContent;
+        darkModeToggle.textContent = currentIcon === '☀️' ? '🌙' : '☀️';
+        document.querySelectorAll('.countdown').forEach(element => {
+            element.classList.toggle('light-mode');
+            element.classList.toggle('dark-mode');
+        });
+    });
+
+    createCountdown('countdown-current-year', new Date(2024, 5, 7), 'Current School Year');
+    createCountdown('countdown-seniors', new Date(2024, 5, 1), 'Seniors');
+    createCountdown('countdown-juniors', new Date(2025, 5, 1), 'Juniors');
+    createCountdown('countdown-sophomores', new Date(2026, 5, 1), 'Sophomores');
+    createCountdown('countdown-freshmen', new Date(2027, 5, 1), 'Freshmen');
+
+    setInitialMode();
+
+    const today = new Date();
+    if (today.getMonth() === 7 && today.getDate() === 29) {
+        resetCurrentSchoolYearCountdown();
+    }
+</script>
 
 
-</body></html>
+</body>
+
+</html>
